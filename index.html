@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Glazeir | Aesthetic Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #0d1117; color: #e6edf3; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .cart-modal { display: none; position: fixed; right: 0; top: 0; width: 300px; height: 100%; background: #161b22; z-index: 100; box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding: 20px; }
+    </style>
+</head>
+<body>
+
+    <nav class="p-4 border-b border-gray-800 sticky top-0 bg-[#0d1117] z-50">
+        <div class="container mx-auto flex flex-wrap justify-between items-center gap-4">
+            <h1 class="text-xl font-bold text-blue-500 tracking-tighter">THE GLAZEIR</h1>
+            
+            <div class="relative flex-1 max-w-md mx-4">
+                <input type="text" id="searchInput" placeholder="অ্যানিমে, রেজিন বা ডেকোর খুঁজুন..." 
+                       class="w-full bg-gray-900 border border-gray-700 rounded-full py-2 px-10 focus:outline-none focus:border-blue-500">
+                <i class="fa fa-search absolute left-4 top-3 text-gray-500"></i>
+            </div>
+
+            <button onclick="toggleCart()" class="relative p-2 text-xl">
+                <i class="fa fa-shopping-cart"></i>
+                <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="flex overflow-x-auto p-4 gap-4 border-b border-gray-800 no-scrollbar">
+        <button class="whitespace-nowrap px-4 py-1 rounded-full bg-blue-600">All</button>
+        <button class="whitespace-nowrap px-4 py-1 rounded-full bg-gray-800">Anime</button>
+        <button class="whitespace-nowrap px-4 py-1 rounded-full bg-gray-800">Resin</button>
+        <button class="whitespace-nowrap px-4 py-1 rounded-full bg-gray-800">Room Decor</button>
+    </div>
+
+    <main class="container mx-auto p-4 mt-6">
+        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="glass-card rounded-lg overflow-hidden p-3 product-item" data-name="Anime Figure">
+                <img src="https://via.placeholder.com/200" class="w-full h-40 object-cover rounded-md mb-2">
+                <h3 class="text-sm font-bold">Anime Action Figure</h3>
+                <p class="text-blue-400 text-sm">৳ ১২০০</p>
+                <button onclick="addToCart('Anime Figure', 1200)" class="w-full mt-2 bg-blue-600 text-xs py-2 rounded">Add to Cart</button>
+            </div>
+            <div class="glass-card rounded-lg overflow-hidden p-3 product-item" data-name="Resin Keychain">
+                <img src="https://via.placeholder.com/200" class="w-full h-40 object-cover rounded-md mb-2">
+                <h3 class="text-sm font-bold">Resin Keychain</h3>
+                <p class="text-blue-400 text-sm">৳ ২৫০</p>
+                <button onclick="addToCart('Resin Keychain', 250)" class="w-full mt-2 bg-blue-600 text-xs py-2 rounded">Add to Cart</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="cartModal" class="cart-modal">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold">Your Cart</h2>
+            <button onclick="toggleCart()"><i class="fa fa-times"></i></button>
+        </div>
+        <div id="cartItems" class="space-y-4 overflow-y-auto h-1/2">
+            </div>
+        <div class="mt-6 border-t border-gray-700 pt-4">
+            <p class="flex justify-between"><span>Total:</span> <span id="cartTotal">৳ ০</span></p>
+            <button onclick="showCheckout()" class="w-full mt-4 bg-green-600 py-3 rounded-lg font-bold">Order Now (Cash on Delivery)</button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-80 z-[200] hidden p-4 flex items-center justify-center">
+        <div class="bg-[#161b22] p-6 rounded-xl w-full max-w-md">
+            <h2 class="text-xl font-bold mb-4">Delivery Details (All over BD)</h2>
+            <form action="https://formspree.io/f/YOUR_ID" method="POST" id="orderForm">
+                <input type="hidden" name="Order_Details" id="orderInput">
+                <div class="space-y-4">
+                    <input type="text" name="Name" placeholder="Full Name" class="w-full bg-gray-900 border border-gray-700 p-2 rounded" required>
+                    <input type="tel" name="Phone" placeholder="Phone Number" class="w-full bg-gray-900 border border-gray-700 p-2 rounded" required>
+                    <textarea name="Address" placeholder="Full Address (Area, District)" class="w-full bg-gray-900 border border-gray-700 p-2 rounded" required></textarea>
+                    <p class="text-xs text-gray-400">* Delivery Charge: ৳ ৮০ (Inside Bogura), ৳ ১৫০ (Outside).</p>
+                    <button type="submit" class="w-full bg-blue-600 py-3 rounded-lg font-bold">Confirm Order</button>
+                </div>
+            </form>
+            <button onclick="closeCheckout()" class="w-full mt-2 text-gray-500 text-sm">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        const cartCount = document.getElementById('cartCount');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateCart();
+        }
+
+        function updateCart() {
+            cartCount.innerText = cart.length;
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="flex justify-between text-sm border-b border-gray-800 pb-2">
+                    <span>${item.name}</span>
+                    <span>৳ ${item.price}</span>
+                </div>
+            `).join('');
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotal.innerText = '৳ ' + total;
+        }
+
+        function showCheckout() {
+            if(cart.length === 0) return alert("Cart is empty!");
+            document.getElementById('checkoutModal').classList.remove('hidden');
+            document.getElementById('orderInput').value = JSON.stringify(cart);
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
+
+        // Simple Search Logic
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            let term = e.target.value.toLowerCase();
+            document.querySelectorAll('.product-item').forEach(item => {
+                let name = item.getAttribute('data-name').toLowerCase();
+                item.style.display = name.includes(term) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
+
