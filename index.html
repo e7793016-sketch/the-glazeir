@@ -27,34 +27,25 @@
         <section>
             <h2 class="text-lg font-bold text-pink-400 mb-4 border-b border-gray-800 pb-2">Resin Keychains (Available)</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                
                 <div class="glass-card rounded-lg p-3">
                     <img src="https://i.postimg.cc/qM6n5W4z/1000149528.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
-                    <h3 class="text-xs font-bold">Amethyst Garden</h3>
-                    <p class="text-pink-400 text-sm font-bold">৳ ১৯৬</p>
+                    <h3 class="text-xs font-bold text-center">Amethyst Garden</h3>
+                    <p class="text-pink-400 text-sm font-bold text-center">৳ ১৯৬</p>
                     <button onclick="addToCart('Amethyst Garden', 196)" class="w-full bg-blue-600 text-[10px] py-2 rounded font-bold mt-2">Add to Cart</button>
                 </div>
-
                 <div class="glass-card rounded-lg p-3">
                     <img src="https://i.postimg.cc/fRPV6N2n/1000149525.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
-                    <h3 class="text-xs font-bold">Ivory Duo</h3>
-                    <p class="text-pink-400 text-sm font-bold">৳ ১৯৬</p>
+                    <h3 class="text-xs font-bold text-center">Ivory Duo</h3>
+                    <p class="text-pink-400 text-sm font-bold text-center">৳ ১৯৬</p>
                     <button onclick="addToCart('Ivory Duo', 196)" class="w-full bg-blue-600 text-[10px] py-2 rounded font-bold mt-2">Add to Cart</button>
                 </div>
-
                 <div class="glass-card rounded-lg p-3">
                     <img src="https://i.postimg.cc/mD8Z8kYQ/1000149517.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
-                    <h3 class="text-xs font-bold">Ruby Crimson</h3>
-                    <p class="text-pink-400 text-sm font-bold">৳ ১৯৬</p>
+                    <h3 class="text-xs font-bold text-center">Ruby Crimson</h3>
+                    <p class="text-pink-400 text-sm font-bold text-center">৳ ১৯৬</p>
                     <button onclick="addToCart('Ruby Crimson', 196)" class="w-full bg-blue-600 text-[10px] py-2 rounded font-bold mt-2">Add to Cart</button>
                 </div>
-
             </div>
-        </section>
-
-        <section class="unavailable">
-            <h2 class="text-lg font-bold text-blue-400 mb-4 border-b border-gray-800 pb-2">Anime & Gaming</h2>
-            <div class="h-20 glass-card rounded-lg flex items-center justify-center">Coming Soon</div>
         </section>
     </main>
 
@@ -72,15 +63,15 @@
 
     <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-80 z-[200] hidden p-4 flex items-center justify-center">
         <div class="bg-[#161b22] p-6 rounded-xl w-full max-w-md">
-            <h2 class="text-xl font-bold mb-4">Delivery Details</h2>
-            <form action="https://formspree.io/f/YOUR_ID" method="POST" id="orderForm">
-                <input type="hidden" name="Order_Details" id="orderInput">
-                <input type="text" name="Name" placeholder="আপনার নাম" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3 text-sm" required>
-                <input type="tel" name="Phone" placeholder="ফোন নম্বর" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3 text-sm" required>
-                <textarea name="Address" placeholder="পুরো ঠিকানা (বগুড়া/অন্যান্য)" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3 text-sm" required></textarea>
+            <h2 class="text-xl font-bold mb-4 text-center">Order Details</h2>
+            <form action="https://formspree.io/f/e7793016@gmail.com" method="POST">
+                <input type="hidden" name="Products" id="orderInput">
+                <input type="text" name="Name" placeholder="আপনার নাম" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3" required>
+                <input type="tel" name="Phone" placeholder="ফোন নম্বর" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3" required>
+                <textarea name="Address" placeholder="পুরো ঠিকানা" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3" required></textarea>
                 <button type="submit" class="w-full bg-blue-600 py-3 rounded font-bold">Confirm Order</button>
             </form>
-            <button onclick="hideCheckout()" class="w-full mt-2 text-gray-500 text-xs">Cancel</button>
+            <button onclick="hideCheckout()" class="w-full mt-2 text-gray-500 text-xs text-center">Cancel</button>
         </div>
     </div>
 
@@ -90,12 +81,8 @@
         function addToCart(name, price) { cart.push({name, price}); updateCart(); toggleCart(); }
         function updateCart() {
             const list = document.getElementById('cartItems');
-            list.innerHTML = '';
-            let total = 0;
-            cart.forEach(i => {
-                list.innerHTML += `<div class="flex justify-between"><span>${i.name}</span><span>৳ ${i.price}</span></div>`;
-                total += i.price;
-            });
+            list.innerHTML = ''; let total = 0;
+            cart.forEach(i => { list.innerHTML += `<div class="flex justify-between"><span>${i.name}</span><span>৳ ${i.price}</span></div>`; total += i.price; });
             document.getElementById('cartCount').innerText = cart.length;
             document.getElementById('cartTotal').innerText = '৳ ' + total;
             document.getElementById('orderInput').value = cart.map(i => i.name).join(', ') + " | Total: " + total;
