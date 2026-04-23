@@ -7,62 +7,101 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #0d1117; color: #e6edf3; font-family: sans-serif; }
+        body { background-color: #0d1117; color: #e6edf3; font-family: sans-serif; overflow-x: hidden; }
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.3s; }
+        .cart-modal { display: none; position: fixed; right: 0; top: 0; width: 300px; height: 100%; background: #161b22; z-index: 100; box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding: 20px; }
         .unavailable { opacity: 0.4; filter: grayscale(1); pointer-events: none; }
-        .badge { background: #ff4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; position: absolute; top: 10px; right: 10px; }
     </style>
 </head>
 <body>
+
     <nav class="p-4 border-b border-gray-800 sticky top-0 bg-[#0d1117] z-50 flex justify-between items-center">
-        <h1 class="text-xl font-bold text-blue-500 tracking-tighter">THE GLAZEIR</h1>
-        <div class="relative w-1/2">
-            <input type="text" placeholder="খুঁজুন..." class="w-full bg-gray-900 border border-gray-700 rounded-full py-1 px-8 text-sm focus:outline-none">
-        </div>
+        <h1 class="text-xl font-bold text-blue-500">THE GLAZEIR</h1>
+        <button onclick="toggleCart()" class="relative p-2 text-xl">
+            <i class="fa fa-shopping-cart"></i>
+            <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-[10px] rounded-full h-4 w-4 flex items-center justify-center">0</span>
+        </button>
     </nav>
 
     <main class="container mx-auto p-4 space-y-8">
-        <section id="resin">
+        <section>
             <h2 class="text-lg font-bold text-pink-400 mb-4 border-b border-gray-800 pb-2">Resin Keychains (Available)</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                
                 <div class="glass-card rounded-lg p-3">
-                    <img src="https://i.ibb.co/qF6Lg8K/1000149528.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
-                    <h3 class="text-xs font-bold text-center">Amethyst Garden</h3>
-                    <p class="text-pink-400 text-sm font-bold text-center">৳ ১৯৬ <span class="text-[10px] line-through text-gray-500">৳ ২৮০</span></p>
-                    <button onclick="order('Amethyst Garden', 196)" class="w-full bg-green-600 text-[10px] py-2 rounded font-bold mt-2">WhatsApp Order</button>
+                    <img src="https://i.postimg.cc/qM6n5W4z/1000149528.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
+                    <h3 class="text-xs font-bold">Amethyst Garden</h3>
+                    <p class="text-pink-400 text-sm font-bold">৳ ১৯৬</p>
+                    <button onclick="addToCart('Amethyst Garden', 196)" class="w-full bg-blue-600 text-[10px] py-2 rounded font-bold mt-2">Add to Cart</button>
                 </div>
+
                 <div class="glass-card rounded-lg p-3">
-                    <img src="https://i.ibb.co/L8yX7M0/1000149525.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
-                    <h3 class="text-xs font-bold text-center">Ivory Duo</h3>
-                    <p class="text-pink-400 text-sm font-bold text-center">৳ ১৯৬ <span class="text-[10px] line-through text-gray-500">৳ ২৮০</span></p>
-                    <button onclick="order('Ivory Duo', 196)" class="w-full bg-green-600 text-[10px] py-2 rounded font-bold mt-2">WhatsApp Order</button>
+                    <img src="https://i.postimg.cc/fRPV6N2n/1000149525.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
+                    <h3 class="text-xs font-bold">Ivory Duo</h3>
+                    <p class="text-pink-400 text-sm font-bold">৳ ১৯৬</p>
+                    <button onclick="addToCart('Ivory Duo', 196)" class="w-full bg-blue-600 text-[10px] py-2 rounded font-bold mt-2">Add to Cart</button>
                 </div>
+
                 <div class="glass-card rounded-lg p-3">
-                    <img src="https://i.ibb.co/sK08rP6/1000149517.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
-                    <h3 class="text-xs font-bold text-center">Ruby Crimson</h3>
-                    <p class="text-pink-400 text-sm font-bold text-center">৳ ১৯৬ <span class="text-[10px] line-through text-gray-500">৳ ২৮০</span></p>
-                    <button onclick="order('Ruby Crimson', 196)" class="w-full bg-green-600 text-[10px] py-2 rounded font-bold mt-2">WhatsApp Order</button>
+                    <img src="https://i.postimg.cc/mD8Z8kYQ/1000149517.png" class="w-full h-40 object-contain rounded mb-2 bg-white">
+                    <h3 class="text-xs font-bold">Ruby Crimson</h3>
+                    <p class="text-pink-400 text-sm font-bold">৳ ১৯৬</p>
+                    <button onclick="addToCart('Ruby Crimson', 196)" class="w-full bg-blue-600 text-[10px] py-2 rounded font-bold mt-2">Add to Cart</button>
                 </div>
+
             </div>
         </section>
 
-        <section class="unavailable relative">
-            <span class="badge">Coming Soon</span>
-            <h2 class="text-lg font-bold text-blue-400 mb-4 border-b border-gray-800 pb-2">Anime & Gaming Collection</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="glass-card rounded-lg p-3 h-32"></div>
-                <div class="glass-card rounded-lg p-3 h-32"></div>
-            </div>
+        <section class="unavailable">
+            <h2 class="text-lg font-bold text-blue-400 mb-4 border-b border-gray-800 pb-2">Anime & Gaming</h2>
+            <div class="h-20 glass-card rounded-lg flex items-center justify-center">Coming Soon</div>
         </section>
     </main>
 
+    <div id="cartModal" class="cart-modal">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="font-bold">Your Cart</h2>
+            <button onclick="toggleCart()"><i class="fa fa-times"></i></button>
+        </div>
+        <div id="cartItems" class="space-y-4 text-sm mb-6"></div>
+        <div class="border-t border-gray-700 pt-4">
+            <p class="flex justify-between mb-4">Total: <span id="cartTotal">৳ 0</span></p>
+            <button onclick="showCheckout()" class="w-full bg-green-600 py-2 rounded font-bold">Checkout</button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-80 z-[200] hidden p-4 flex items-center justify-center">
+        <div class="bg-[#161b22] p-6 rounded-xl w-full max-w-md">
+            <h2 class="text-xl font-bold mb-4">Delivery Details</h2>
+            <form action="https://formspree.io/f/YOUR_ID" method="POST" id="orderForm">
+                <input type="hidden" name="Order_Details" id="orderInput">
+                <input type="text" name="Name" placeholder="আপনার নাম" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3 text-sm" required>
+                <input type="tel" name="Phone" placeholder="ফোন নম্বর" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3 text-sm" required>
+                <textarea name="Address" placeholder="পুরো ঠিকানা (বগুড়া/অন্যান্য)" class="w-full bg-gray-800 border border-gray-700 p-2 rounded mb-3 text-sm" required></textarea>
+                <button type="submit" class="w-full bg-blue-600 py-3 rounded font-bold">Confirm Order</button>
+            </form>
+            <button onclick="hideCheckout()" class="w-full mt-2 text-gray-500 text-xs">Cancel</button>
+        </div>
+    </div>
+
     <script>
-        function order(name, price) {
-            const num = "8801700000000"; // এখানে আপনার নম্বর বসান
-            const msg = `Hello The Glazeir! Ami order korte chai:\nProduct: ${name}\nPrice: ৳${price}`;
-            window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank');
+        let cart = [];
+        function toggleCart() { const m = document.getElementById('cartModal'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; }
+        function addToCart(name, price) { cart.push({name, price}); updateCart(); toggleCart(); }
+        function updateCart() {
+            const list = document.getElementById('cartItems');
+            list.innerHTML = '';
+            let total = 0;
+            cart.forEach(i => {
+                list.innerHTML += `<div class="flex justify-between"><span>${i.name}</span><span>৳ ${i.price}</span></div>`;
+                total += i.price;
+            });
+            document.getElementById('cartCount').innerText = cart.length;
+            document.getElementById('cartTotal').innerText = '৳ ' + total;
+            document.getElementById('orderInput').value = cart.map(i => i.name).join(', ') + " | Total: " + total;
         }
+        function showCheckout() { if(cart.length > 0) document.getElementById('checkoutModal').classList.remove('hidden'); }
+        function hideCheckout() { document.getElementById('checkoutModal').classList.add('hidden'); }
     </script>
 </body>
 </html>
-
